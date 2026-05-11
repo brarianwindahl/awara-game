@@ -9,7 +9,15 @@ const ORACLE_KEY_STORAGE = 'awara_oracle_apikey';
 const ORACLE_HISTORY_STORAGE = 'awara_oracle_history';
 const ORACLE_MODEL_STORAGE = 'awara_oracle_model';
 const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const DEFAULT_MODEL = 'anthropic/claude-sonnet-4';
+const DEFAULT_MODEL = 'google/gemini-2.5-flash';
+
+export const AVAILABLE_MODELS = [
+  { id: 'google/gemini-2.5-flash', name: 'Gemini 2.5 Flash', desc: 'быстрый, дешёвый, философский' },
+  { id: 'google/gemini-2.5-pro', name: 'Gemini 2.5 Pro', desc: 'глубокий, дороже' },
+  { id: 'anthropic/claude-sonnet-4', name: 'Claude Sonnet', desc: 'точный, премиум' },
+  { id: 'openai/gpt-4o-mini', name: 'GPT-4o Mini', desc: 'компактный, быстрый' },
+  { id: 'meta-llama/llama-4-maverick', name: 'Llama 4 Maverick', desc: 'открытый, бесплатный*' },
+];
 const MAX_HISTORY = 20;
 
 export function getApiKey() {

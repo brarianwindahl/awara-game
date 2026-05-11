@@ -195,6 +195,18 @@ h1{
   letter-spacing:0.1em;transition:all 0.3s;min-height:44px;
 }
 .settings-toggle:hover{border-color:var(--accent);color:var(--accent)}
+
+.model-select{
+  width:100%;background:rgba(180,120,255,0.04);color:var(--text);
+  border:1px solid var(--accent-line);border-radius:8px;
+  padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:12px;
+  outline:none;cursor:pointer;transition:border-color 0.3s;
+  appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(180,120,255,0.5)'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;
+}
+.model-select:focus{border-color:var(--accent)}
+.model-select option{background:#0a0a14;color:var(--text)}
 </style>
 </head>
 <body>
@@ -217,6 +229,8 @@ h1{
       <button class="settings-toggle" onclick="toggleKeyPanel()" title="Скрыть">&#10005;</button>
     </div>
     <div id="keyStatus" class="key-status"></div>
+    <label style="margin-top:12px;display:block;">Модель</label>
+    <select id="modelSelect" class="model-select" onchange="changeModel(this.value)"></select>
     <div style="margin-top:8px;font-size:10px;color:var(--text-mute);">
       Ключ хранится только в вашем браузере. <a href="https://openrouter.ai/keys" target="_blank" style="color:var(--accent-dim)">Получить ключ</a>
     </div>
@@ -253,7 +267,7 @@ h1{
 </div>
 
 <script type="module">
-import { getApiKey, setApiKey, getHistory, saveHistory, clearHistory, sendMessage, getModel, setModel } from './js/oracle.js';
+import { getApiKey, setApiKey, getHistory, saveHistory, clearHistory, sendMessage, getModel, setModel, AVAILABLE_MODELS } from './js/oracle.js';
 
 const chatArea = document.getElementById('chatArea');
 const chatInput = document.getElementById('chatInput');
@@ -263,11 +277,28 @@ const keyStatus = document.getElementById('keyStatus');
 const keyPanel = document.getElementById('keyPanel');
 const keyBar = document.getElementById('keyBar');
 const welcome = document.getElementById('welcome');
+const modelSelect = document.getElementById('modelSelect');
 
 let chatHistory = [];
 let sending = false;
 
+function initModelSelector() {
+  const current = getModel();
+  AVAILABLE_MODELS.forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m.id;
+    opt.textContent = `${m.name} — ${m.desc}`;
+    if (m.id === current) opt.selected = true;
+    modelSelect.appendChild(opt);
+  });
+}
+
+window.changeModel = function(modelId) {
+  setModel(modelId);
+};
+
 function init() {
+  initModelSelector();
   const key = getApiKey();
   if (key) {
     keyInput.value = key;
