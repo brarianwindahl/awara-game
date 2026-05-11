@@ -25,26 +25,29 @@
 | Сессия | https://app.devin.ai/sessions/62b6aff860814728a556d1a69288d140 |
 | Модель | Fast Mode / Sonnet |
 | Дата | 2026-05-11 (UTC) |
-| Закрытые задачи | T-029, T-030 |
-| Следующая задача | **T-031** (Оракул LLM, см. TASKS.md) |
-| Состояние master | T-010 merged; T-029/T-030 в fork PR, ожидает merge |
+| Закрытые задачи | T-029, T-030, T-031 |
+| Следующая задача | Phase 4+ (см. TASKS.md backlog) |
+| Состояние master | T-010 merged; T-029/T-030/T-031 в fork PR, ожидает merge |
 | Pages | включён, master/root |
 
 ---
 
 ## Лог смен (новые записи СВЕРХУ)
 
-### 2026-05-11 · paharaduga-beep · T-029 + T-030
+### 2026-05-11 · paharaduga-beep · T-029 + T-030 + T-031
 
 - Закрыто: T-029 — natal.html форма ввода натальных данных (UI)
 - Закрыто: T-030 — подключить Swiss Ephemeris (JS-порт для браузера)
+- Закрыто: T-031 — Оракул v0 (LLM через OpenRouter)
 - natal.html: форма (дата/время/город) + расчёт 9 планет (Навграхи), 12 домов (Бхавы), Лагна
 - @swisseph/browser WASM (lib/swisseph/, ~500KB) — пропатчен для работы в браузере
 - Сидерический зодиак (Lahiri аянамша), Whole Sign дома, 27 накшатр
 - Геокодирование города через Nominatim OpenStreetMap API
 - localStorage: awara_natal_data (форма), awara_natal_chart (расчёт)
-- Кнопка «НАТАЛЬНАЯ КАРТА» в лобби (index.html)
-- Phase 3 (T-029..T-031) добавлена в TASKS.md
+- oracle.html + js/oracle.js: чат с LLM в контексте AWARA (агент, матрица, стихия, натальные данные)
+- OpenRouter API, ключ в localStorage (§6.5 — не в коде)
+- Кнопки «НАТАЛЬНАЯ КАРТА» и «ОРАКУЛ» в лобби (index.html)
+- Phase 3 (T-029..T-031) добавлена в TASKS.md, все 3 задачи закрыты
 
 ### 2026-05-10 · victorianpieraverdi-dev · T-010
 
