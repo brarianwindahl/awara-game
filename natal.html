@@ -296,11 +296,19 @@ body{
     </div>
   </div>
 
+  <div class="result-card" id="dosha-block" style="display:none;margin-top:12px;">
+    <div class="section-title">КОНСТИТУЦИЯ (ПАНЧА-БХУТА)</div>
+    <div id="dosha-content"></div>
+  </div>
+
 </div>
 
 <script type="module">
+import { calculateDosha, renderDosha } from './js/dosha.js';
+
 const STORAGE_KEY = 'awara_natal_data';
 const STORAGE_CHART = 'awara_natal_chart';
+const STORAGE_DOSHA = 'awara_dosha';
 
 const SIGNS = [
   'Овен','Телец','Близнецы','Рак','Лев','Дева',
@@ -526,6 +534,14 @@ function showStatus(msg, isError) {
   content.innerHTML = '<div class="calc-status' + (isError ? ' error' : '') + '">' + msg + '</div>';
 }
 
+function showDosha(dosha) {
+  var block = document.getElementById('dosha-block');
+  var container = document.getElementById('dosha-content');
+  block.style.display = '';
+  block.classList.add('visible');
+  renderDosha(container, dosha);
+}
+
 function loadSavedData() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -541,6 +557,13 @@ function loadSavedData() {
         const chart = JSON.parse(savedChart);
         document.getElementById('result-block').classList.add('visible');
         renderChart(chart.data, chart.geoDisplay);
+      } catch (e) { /* ignore */ }
+    }
+
+    const savedDosha = localStorage.getItem(STORAGE_DOSHA);
+    if (savedDosha) {
+      try {
+        showDosha(JSON.parse(savedDosha));
       } catch (e) { /* ignore */ }
     }
   } catch (e) { /* ignore corrupt data */ }
@@ -593,6 +616,10 @@ async function doCalculate() {
     showStatus('<span class="loading">Расчёт планет и домов...</span>', false);
     const chart = await calculateChart(dateVal, timeVal, lat, lon);
     renderChart(chart, geoDisplay);
+
+    const dosha = calculateDosha(chart);
+    showDosha(dosha);
+    localStorage.setItem(STORAGE_DOSHA, JSON.stringify(dosha));
 
     localStorage.setItem(STORAGE_CHART, JSON.stringify({ data: chart, geoDisplay, calculatedAt: new Date().toISOString() }));
   } catch (err) {
