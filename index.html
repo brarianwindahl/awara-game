@@ -804,6 +804,27 @@ window.applyMatrixTheme = function(mid) {
         white-space:nowrap;flex-shrink:0;">&#9789; ОТКРЫТЬ</div>
     </div>
 
+    <!-- 2.10. ОРАКУЛ -->
+    <div ontouchstart="this.click()" onclick="window.location.href='oracle.html'" style="
+      padding:clamp(6px,1.5vw,9px) clamp(10px,2.5vw,12px);border-radius:10px;cursor:pointer;
+      background:linear-gradient(135deg,rgba(180,120,255,0.07),rgba(140,80,220,0.04));
+      border:1px solid rgba(180,120,255,0.22);
+      display:flex;align-items:center;gap:12px;transition:all 0.3s;
+    "
+    onmouseenter="this.style.borderColor='rgba(180,120,255,0.55)';this.style.background='linear-gradient(135deg,rgba(180,120,255,0.14),rgba(140,80,220,0.08))'"
+    onmouseleave="this.style.borderColor='rgba(180,120,255,0.22)';this.style.background='linear-gradient(135deg,rgba(180,120,255,0.07),rgba(140,80,220,0.04))'">
+      <div style="font-size:clamp(16px,4vw,20px);flex-shrink:0;filter:drop-shadow(0 0 8px rgba(180,120,255,0.6));">&#128302;</div>
+      <div style="flex:1;text-align:center;">
+        <div style="font-family:'Cinzel',serif;font-size:clamp(12px,3vw,14px);color:rgba(180,120,255,0.9);letter-spacing:0.2em;">ОРАКУЛ</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:clamp(9px,2vw,10px);color:rgba(180,120,255,0.4);margin-top:2px;">МУДРОСТЬ ДРЕВНИХ ТРАДИЦИЙ</div>
+      </div>
+      <div style="
+        font-family:'JetBrains Mono',monospace;font-size:10px;
+        color:rgba(180,120,255,0.7);padding:3px 10px;border-radius:20px;
+        background:rgba(180,120,255,0.06);border:1px solid rgba(180,120,255,0.2);
+        white-space:nowrap;flex-shrink:0;">&#128302; ОТКРЫТЬ</div>
+    </div>
+
     <!-- 2.9b. ПЕРЕКЛЮЧАТЕЛЬ МАТРИЦЫ (быстрый) -->
     <div id="matrix-switcher-widget" style="
       padding:clamp(8px,2vw,12px) clamp(6px,1.5vw,10px);border-radius:12px;
@@ -14165,9 +14186,40 @@ body[data-matrix="gene"]::before {
   opacity: 1;
 }
 
-/* ── Pulse при смене матрицы ── */
+/* ── Анимации перехода при смене матрицы ── */
 body.matrix-switching::before { opacity: 0.7 !important; }
-body.matrix-switching { transition: filter 0.5s; filter: brightness(1.06); }
+body.matrix-switching {
+  animation: matrixPulse 0.6s ease-out;
+}
+@keyframes matrixPulse {
+  0%   { filter: brightness(1) saturate(1); }
+  30%  { filter: brightness(1.15) saturate(1.4); }
+  100% { filter: brightness(1) saturate(1); }
+}
+.matrix-fade-out {
+  animation: matrixFadeOut 0.25s ease-in forwards;
+}
+.matrix-fade-in {
+  animation: matrixFadeIn 0.35s ease-out forwards;
+}
+@keyframes matrixFadeOut {
+  0%   { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.97); }
+}
+@keyframes matrixFadeIn {
+  0%   { opacity: 0; transform: scale(1.03); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.matrix-color-sweep::after {
+  content: '';
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none; z-index: 9999;
+  animation: colorSweep 0.5s ease-out forwards;
+}
+@keyframes colorSweep {
+  0%   { background: radial-gradient(ellipse at 50% 50%, var(--awara-glow, rgba(201,168,76,0.3)), transparent 60%); opacity: 0.8; }
+  100% { background: transparent; opacity: 0; }
+}
 
 /* ── Kabbalistic: фиолетово-синий, Древо ── */
 body[data-matrix="kabbalistic"] {
@@ -14546,20 +14598,47 @@ window.getMatrix = function(id) {
 
 
 window.applyMatrixTheme = function(mid) {
-  // Применяем и на documentElement (для старых правил) и на body (для новых)
-  document.documentElement.setAttribute('data-matrix', mid);
-  document.body.setAttribute('data-matrix', mid);
-  localStorage.setItem('awara_matrix', mid);
-  localStorage.setItem('awara_matrix_theme', mid); // дополнительный ключ
-  var lbl = document.getElementById('active-matrix-label');
-  if (lbl) lbl.textContent = MATRIX_NAMES[mid] || mid.toUpperCase();
-  // Pulse-эффект смены
-  document.body.classList.add('matrix-switching');
-  setTimeout(function(){ document.body.classList.remove('matrix-switching'); }, 600);
-  // Обновить DayData если доступно
-  if (window.AWARA_SYS && window.AWARA_SYS.DayData) {
-    window.AWARA_SYS.DayData.update(mid);
+  var wrap = document.querySelector('.wrap, .main-wrap, body > div');
+
+  // Фаза 1: fade-out контента
+  if (wrap) {
+    wrap.classList.add('matrix-fade-out');
   }
+
+  // Цветовая вспышка
+  document.body.classList.add('matrix-color-sweep');
+
+  setTimeout(function() {
+    // Применяем тему
+    document.documentElement.setAttribute('data-matrix', mid);
+    document.body.setAttribute('data-matrix', mid);
+    localStorage.setItem('awara_matrix', mid);
+    localStorage.setItem('awara_matrix_theme', mid);
+    var lbl = document.getElementById('active-matrix-label');
+    if (lbl) lbl.textContent = MATRIX_NAMES[mid] || mid.toUpperCase();
+
+    // Pulse на body
+    document.body.classList.add('matrix-switching');
+    setTimeout(function(){ document.body.classList.remove('matrix-switching'); }, 600);
+
+    // Фаза 2: fade-in контента
+    if (wrap) {
+      wrap.classList.remove('matrix-fade-out');
+      wrap.classList.add('matrix-fade-in');
+      setTimeout(function() {
+        wrap.classList.remove('matrix-fade-in');
+      }, 350);
+    }
+
+    setTimeout(function() {
+      document.body.classList.remove('matrix-color-sweep');
+    }, 500);
+
+    // Обновить DayData если доступно
+    if (window.AWARA_SYS && window.AWARA_SYS.DayData) {
+      window.AWARA_SYS.DayData.update(mid);
+    }
+  }, 250);
 };
 
 window.openMatrixModal = function() {

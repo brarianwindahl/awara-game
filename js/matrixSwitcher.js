@@ -139,8 +139,24 @@ export function renderSwitcher(container, onChange) {
       }
     };
     btn.onclick = function() {
+      var prev = getActivePerception();
+      if (prev === p.id) return;
+      // Анимация кнопок: сжатие текущей, расширение новой
+      var allBtns = container.querySelectorAll('[data-matrix-id]');
+      allBtns.forEach(function(b) {
+        b.style.transition = 'all 0.3s ease';
+        if (b.getAttribute('data-matrix-id') === p.id) {
+          b.style.transform = 'scale(1.08)';
+          setTimeout(function() { b.style.transform = 'scale(1)'; }, 300);
+        } else {
+          b.style.transform = 'scale(0.95)';
+          setTimeout(function() { b.style.transform = 'scale(1)'; }, 300);
+        }
+      });
       setActivePerception(p.id);
-      renderSwitcher(container, onChange);
+      setTimeout(function() {
+        renderSwitcher(container, onChange);
+      }, 300);
       if (typeof onChange === 'function') onChange(p.id);
     };
 
