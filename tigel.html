@@ -652,6 +652,12 @@ body {
       <!-- РЕКОМЕНДАЦИИ -->
       <div id="recommendations" class="recommendations"></div>
 
+      <!-- ПРОВОДНИК ПО НАКШАТРЕ -->
+      <div id="nakshatra-guide" style="display:none;margin-top:18px;padding:14px;border-radius:10px;background:rgba(100,160,255,0.04);border:1px solid rgba(100,160,255,0.15);">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.2em;color:rgba(100,160,255,0.45);margin-bottom:12px;text-align:center;">ПРОВОДНИК ПО НАКШАТРЕ</div>
+        <div id="nakshatra-guide-content"></div>
+      </div>
+
       <!-- ИТОГИ ДНЯ — 7 параметров -->
       <div id="day-summary" style="display:none;margin-top:18px;padding:14px;border-radius:10px;background:rgba(201,168,76,0.04);border:1px solid rgba(201,168,76,0.15);">
         <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.2em;color:rgba(201,168,76,0.5);margin-bottom:12px;text-align:center;">ИТОГИ ДНЯ</div>
@@ -712,6 +718,26 @@ body {
 <script type="module">
 import { getState, saveState } from './js/playerState.js';
 window._playerState = { getState, saveState };
+</script>
+
+<!-- ══ НАКШАТРА-ПРОВОДНИК ══ -->
+<script type="module">
+import { getNakshatraGuide, findAgentBySlug, renderNakshatraGuide } from './js/nakshatraAgent.js';
+(async function() {
+  try {
+    var guide = getNakshatraGuide();
+    if (!guide) return;
+    var resp = await fetch('data/agents.json');
+    var agents = await resp.json();
+    var agent = findAgentBySlug(agents, guide.agentSlug);
+    var block = document.getElementById('nakshatra-guide');
+    var container = document.getElementById('nakshatra-guide-content');
+    if (block && container) {
+      renderNakshatraGuide(container, guide, agent);
+      block.style.display = '';
+    }
+  } catch(e) { console.warn('nakshatraAgent:', e); }
+})();
 </script>
 
 <!-- ══ ДВИЖКИ ══ -->
