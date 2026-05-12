@@ -25,14 +25,21 @@
 | Сессия | https://app.devin.ai/sessions/a0fda14696cc45db8ec2b3f3bdc82a8d |
 | Модель | Fast Mode / Sonnet |
 | Дата | 2026-05-11 (UTC) |
-| Закрытые задачи | T-028..T-036 |
-| Следующая задача | следующая из backlog (см. TASKS.md) |
-| Состояние master | T-028..T-036 merged |
+| Закрытые задачи | T-028..T-037 |
+| Следующая задача | T-038 (массовый рендер карт, см. TASKS.md) |
+| Состояние master | T-028..T-037 merged |
 | Pages | включён, master/root |
 
 ---
 
 ## Лог смен (новые записи СВЕРХУ)
+
+### 2026-05-11 · dadyup08-debug · T-037
+
+- T-037: tools/generate_card_prompts.py — 693 промпта для генерации карт (21 агент x 33 матрицы)
+- data/card_prompts.json — структурированные промпты с элементами, визуальными мотивами, cultural_name
+- cards.html расширен на 33 матрицы (было 3), img с lazy load + fallback на emoji
+- Phase 4 добавлена в TASKS.md (T-037..T-041)
 
 ### 2026-05-11 · dadyup08-debug · T-031, T-034, T-035, T-036
 

@@ -101,6 +101,16 @@ body{
 .card:hover{border-color:rgba(201,168,76,0.5);transform:translateY(-2px);}
 
 .card-el{font-size:clamp(24px,6vw,32px);margin-bottom:6px;}
+.card-img{
+  width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:8px;
+  margin-bottom:6px;background:rgba(201,168,76,0.05);
+}
+.card-img-placeholder{
+  width:100%;aspect-ratio:3/4;border-radius:8px;
+  margin-bottom:6px;background:rgba(201,168,76,0.05);
+  display:flex;align-items:center;justify-content:center;
+  font-size:clamp(24px,6vw,32px);
+}
 .card-name{
   font-family:'Cormorant Garamond',serif;
   font-size:clamp(12px,3vw,14px);color:var(--text);
@@ -166,7 +176,7 @@ body{
   </div>
 
   <div class="page-title">КОЛОДА КАРТ</div>
-  <div class="page-sub">21 АГЕНТ × 3 МАТРИЦЫ = 63 КАРТЫ</div>
+  <div class="page-sub">21 АГЕНТ × 33 МАТРИЦЫ = 693 КАРТЫ</div>
   <div class="counter" id="counter">Собрано: <b>0</b> / 63</div>
 
   <div class="filter-row" id="filters"></div>
@@ -188,7 +198,8 @@ body{
 </div>
 
 <script>
-var MATRICES = ['Ведическая','Славянская','Каббалистическая'];
+var MATRICES = [];
+var cardPrompts = {};
 var MATRIX_EFFECTS = {
   'Ведическая':   '+1 ✦ свет/час',
   'Славянская':    '+5% шанс ключа',
@@ -215,7 +226,11 @@ async function init(){
 
   try {
     agents = await fetch('data/agents.json').then(function(r){return r.json();});
-  } catch(e){ console.warn('cards: agents.json error', e); return; }
+    var matrices = await fetch('data/matrices.json').then(function(r){return r.json();});
+    MATRICES = matrices.map(function(m){ return m.name; });
+    var prompts = await fetch('data/card_prompts.json').then(function(r){return r.json();});
+    prompts.forEach(function(p){ cardPrompts[p.card_id] = p; });
+  } catch(e){ console.warn('cards: data load error', e); return; }
 
   renderFilters();
   renderCards('all');
@@ -248,9 +263,14 @@ function renderCards(filter){
       var cid = cardId(a.slug, m);
       var owned = !!collected[cid];
       var elIcon = EL_ICO[a.element] || '✦';
+      var imgHtml = '<div class="card-img-placeholder">'+elIcon+'</div>';
+      var cp = cardPrompts[cid];
+      if(cp && cp.image_path){
+        imgHtml = '<img class="card-img" src="'+cp.image_path+'" alt="'+(owned?a.name:'???')+'" loading="lazy" onerror="this.outerHTML=\'<div class=card-img-placeholder>'+elIcon+'</div>\'">';
+      }
       html += '<div class="card '+(owned?'owned':'locked')+'" onclick="showCard(\''+a.slug+'\',\''+m+'\')">' +
         (owned ? '<div class="card-badge">✦</div>' : '<div class="card-locked-ico">🔒</div>') +
-        '<div class="card-el">'+elIcon+'</div>' +
+        imgHtml +
         '<div class="card-name">'+(owned ? a.name : '???')+'</div>' +
         '<div class="card-matrix">'+m.toUpperCase()+'</div>' +
         '<div class="card-element">'+a.element+'</div>' +
@@ -266,6 +286,10 @@ function showCard(slug, matrix){
   var cid = cardId(slug, matrix);
   var owned = !!collected[cid];
 
+  var cp = cardPrompts[cid];
+  if(cp && cp.cultural_name && owned){
+    document.getElementById('pop-name').dataset.cultural = cp.cultural_name;
+  }
   document.getElementById('pop-ico').textContent = EL_ICO[a.element] || '✦';
   document.getElementById('pop-name').textContent = owned ? a.name : '???';
   document.getElementById('pop-matrix').textContent = matrix.toUpperCase();
@@ -279,7 +303,7 @@ function showCard(slug, matrix){
 }
 
 function updateCounter(){
-  var total = agents.length * MATRICES.length;
+  var total = Object.keys(cardPrompts).length || agents.length * MATRICES.length;
   var count = Object.keys(collected).length;
   document.getElementById('counter').innerHTML = 'Собрано: <b>'+count+'</b> / '+total;
 }

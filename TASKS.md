@@ -220,6 +220,33 @@
   Файлы: `js/matrixSwitcher.js`, `index.html`
   Est: 10 мин
 
+### Phase 4 — Генерация картинок и музыки
+
+- [x] **T-037 · Промпты для генерации карт + подготовка cards.html**
+  DoD: tools/generate_card_prompts.py генерирует data/card_prompts.json (693 промпта для 21 агент x 33 матрицы). cards.html расширен на 33 матрицы с поддержкой img + fallback на emoji.
+  Файлы: `tools/generate_card_prompts.py`, `data/card_prompts.json`, `cards.html`
+  Est: 10 мин
+
+- [ ] **T-038 · Массовый рендер карт через Replicate API**
+  DoD: скрипт tools/render_cards.py читает card_prompts.json и генерирует webp-изображения в cards/. Требует API-ключ Replicate.
+  Файлы: `tools/render_cards.py`, `cards/`
+  Est: 15 мин
+
+- [ ] **T-039 · Подключение картинок в cards.html (lazy load + CDN)**
+  DoD: cards.html подгружает сгенерированные изображения. Lazy loading, fallback на placeholder.
+  Файлы: `cards.html`
+  Est: 10 мин
+
+- [ ] **T-040 · Музыка для Тигеля**
+  DoD: фоновая музыка в tigel.html. API генерации или статичные файлы.
+  Файлы: `tigel.html`, `audio/`
+  Est: 15 мин
+
+- [ ] **T-041 · Образ дня (ежедневная генерация)**
+  DoD: ежедневная генерация картинки на основе тигельных данных. Показывается в лобби.
+  Файлы: `index.html`, `js/dailyImage.js`
+  Est: 15 мин
+
 ---
 
 ## Done (закрытые)
