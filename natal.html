@@ -301,7 +301,14 @@ body{
     <div id="dosha-content"></div>
   </div>
 
+  <div class="result-card" id="kaleidoscope-block" style="display:none;margin-top:12px;">
+    <div class="section-title">КАЛЕЙДОСКОП ЭНЕРГИЙ · 9 МАТРИЦ</div>
+    <div id="kaleidoscope-content"></div>
+  </div>
+
 </div>
+
+<script src="js/core.js?v=32"></script>
 
 <script type="module">
 import { calculateDosha, renderDosha } from './js/dosha.js';
@@ -542,6 +549,73 @@ function showDosha(dosha) {
   renderDosha(container, dosha);
 }
 
+const MATRICES = [
+  { id: 'vedic', name: 'Ведическая', icon: '\u{1F54E}' },
+  { id: 'slavic', name: 'Славянская', icon: '\u26A1' },
+  { id: 'dao', name: 'Даосизм', icon: '\u262F' },
+  { id: 'maya', name: 'Майянская', icon: '\u{1F31E}' },
+  { id: 'shambhala', name: 'Шамбала', icon: '\u{1F3D4}' },
+  { id: 'gene', name: 'Генные Ключи', icon: '\u{1F9EC}' },
+  { id: 'egypt', name: 'Египетская', icon: '\u{1303C}' },
+  { id: 'kabbalah', name: 'Каббала', icon: '\u2721' },
+  { id: 'neutral', name: 'Юлианский', icon: '\u25CE' }
+];
+
+function renderKaleidoscope(dateStr, timeStr) {
+  const block = document.getElementById('kaleidoscope-block');
+  const container = document.getElementById('kaleidoscope-content');
+  if (!block || !container) return;
+
+  if (typeof window.AWARA_SYS === 'undefined' || typeof window.AWARA_SYS.DayData === 'undefined' ||
+      typeof window.AWARA_SYS.DayData.calc !== 'function') {
+    block.style.display = 'none';
+    return;
+  }
+
+  const dateTimeStr = dateStr + (timeStr ? 'T' + timeStr : 'T12:00');
+  const d = new Date(dateTimeStr);
+  if (isNaN(d.getTime())) return;
+
+  let html = '';
+  let hasData = false;
+
+  MATRICES.forEach(function(matrix) {
+    try {
+      const data = window.AWARA_SYS.DayData.calc(matrix.id, d);
+      if (!data) return;
+      hasData = true;
+
+      const col = data.col || '#c9a84c';
+      html += '<div style="margin-bottom:14px;padding:12px;border-radius:10px;background:rgba(201,168,76,0.05);border:1px solid rgba(201,168,76,0.15);">';
+      html += '<div style="font-size:11px;color:' + col + ';letter-spacing:0.1em;margin-bottom:10px;display:flex;align-items:center;gap:8px;">';
+      html += '<span style="font-size:16px;">' + matrix.icon + '</span>';
+      html += '<span>' + matrix.name.toUpperCase() + '</span>';
+      html += '</div>';
+      html += '<div style="display:grid;gap:6px;">';
+
+      for (var i = 1; i <= 9; i++) {
+        var label = data['label' + i];
+        var val = data['val' + i];
+        if (label && val) {
+          html += '<div style="padding:6px 8px;border-radius:4px;background:rgba(201,168,76,0.04);border-left:2px solid ' + col + ';">';
+          html += '<div style="font-size:7px;color:rgba(201,168,76,0.5);margin-bottom:2px;letter-spacing:0.05em;">' + label + '</div>';
+          html += '<div style="font-size:10px;color:#c9a84c;">' + val + '</div>';
+          html += '</div>';
+        }
+      }
+      html += '</div></div>';
+    } catch (e) {
+      console.error('Ошибка расчёта матрицы ' + matrix.id + ':', e);
+    }
+  });
+
+  if (hasData) {
+    container.innerHTML = html;
+    block.style.display = '';
+    block.classList.add('visible');
+  }
+}
+
 function loadSavedData() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -565,6 +639,10 @@ function loadSavedData() {
       try {
         showDosha(JSON.parse(savedDosha));
       } catch (e) { /* ignore */ }
+    }
+
+    if (data.date) {
+      renderKaleidoscope(data.date, data.time || '');
     }
   } catch (e) { /* ignore corrupt data */ }
 }
@@ -622,6 +700,8 @@ async function doCalculate() {
     localStorage.setItem(STORAGE_DOSHA, JSON.stringify(dosha));
 
     localStorage.setItem(STORAGE_CHART, JSON.stringify({ data: chart, geoDisplay, calculatedAt: new Date().toISOString() }));
+
+    renderKaleidoscope(dateVal, timeVal);
   } catch (err) {
     console.error('Natal calc error:', err);
     showStatus('Ошибка расчёта: ' + err.message + '<br><br>Возможно, браузер не поддерживает WebAssembly или CDN недоступен.', true);
