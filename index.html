@@ -362,41 +362,7 @@ window.applyMatrixTheme = function(mid) {
       <div style="font-family:'JetBrains Mono',monospace;font-size:clamp(9px,2vw,10px);color:rgba(100,180,255,0.45);letter-spacing:0.1em;">ПРОСТРАНСТВА · ЗЕМЛЯ · ВСЕЛЕННАЯ · МИРОЗДАНИЕ</div>
     </div>
 
-    <!-- КЛЮЧ ДНЯ -->
-    <div id="daily-key-card" style="
-      padding:clamp(10px,2.5vw,16px);border-radius:12px;
-      background:linear-gradient(135deg,rgba(201,168,76,0.10),rgba(180,140,50,0.05));
-      border:1px solid rgba(201,168,76,0.30);
-      display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;
-      transition:all 0.3s;position:relative;overflow:hidden;
-    ">
-      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(201,168,76,0.06),transparent 70%);pointer-events:none;"></div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.2em;color:rgba(201,168,76,0.45);">КЛЮЧ ДНЯ</div>
-      <div id="dk-agent" style="font-family:'Cinzel',serif;font-size:clamp(14px,3.5vw,18px);color:rgba(255,248,214,0.9);letter-spacing:0.15em;">...</div>
-      <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;">
-        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.15em;color:rgba(201,168,76,0.35);">МАТРИЦА</div>
-          <div id="dk-matrix" style="font-family:'Cormorant Garamond',serif;font-size:clamp(11px,2.5vw,13px);color:rgba(201,168,76,0.8);">...</div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.15em;color:rgba(201,168,76,0.35);">СТИХИЯ</div>
-          <div id="dk-element" style="font-family:'Cormorant Garamond',serif;font-size:clamp(11px,2.5vw,13px);color:rgba(201,168,76,0.8);">...</div>
-        </div>
-      </div>
-      <div id="dk-question" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(12px,3vw,15px);color:rgba(220,210,190,0.7);line-height:1.5;margin-top:4px;">...</div>
-    </div>
 
-    <!-- STREAK 7 ДНЕЙ -->
-    <div id="streak-widget" style="
-      padding:8px 12px;border-radius:10px;
-      background:rgba(201,168,76,0.04);
-      border:1px solid rgba(201,168,76,0.15);
-      display:flex;align-items:center;gap:10px;justify-content:center;
-    ">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.15em;color:rgba(201,168,76,0.4);">СЕРИЯ</div>
-      <div id="streak-dots" style="display:flex;gap:6px;align-items:center;"></div>
-      <div id="streak-count" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(201,168,76,0.7);min-width:20px;text-align:center;">0</div>
-    </div>
 
     <!-- 2. СМЫСЛ ДНЯ -->
     <div id="daily-meaning-btn" ontouchstart="this.click()" onclick="window.openDailyMeaning()" style="
@@ -555,6 +521,42 @@ window.applyMatrixTheme = function(mid) {
         <div style="font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:0.2em;color:rgba(201,168,76,0.3);">МАТРИЦА ВОСПРИЯТИЯ</div>
       </div>
       <div id="matrix-switcher-container"></div>
+    </div>
+
+    <!-- КЛЮЧ ДНЯ -->
+    <div id="daily-key-card" style="
+      padding:clamp(10px,2.5vw,16px);border-radius:12px;
+      background:linear-gradient(135deg,rgba(201,168,76,0.10),rgba(180,140,50,0.05));
+      border:1px solid rgba(201,168,76,0.30);
+      display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;
+      transition:all 0.3s;position:relative;overflow:hidden;
+    ">
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(201,168,76,0.06),transparent 70%);pointer-events:none;"></div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.2em;color:rgba(201,168,76,0.45);">КЛЮЧ ДНЯ</div>
+      <div id="dk-agent" style="font-family:'Cinzel',serif;font-size:clamp(14px,3.5vw,18px);color:rgba(255,248,214,0.9);letter-spacing:0.15em;">...</div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.15em;color:rgba(201,168,76,0.35);">МАТРИЦА</div>
+          <div id="dk-matrix" style="font-family:'Cormorant Garamond',serif;font-size:clamp(11px,2.5vw,13px);color:rgba(201,168,76,0.8);">...</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.15em;color:rgba(201,168,76,0.35);">СТИХИЯ</div>
+          <div id="dk-element" style="font-family:'Cormorant Garamond',serif;font-size:clamp(11px,2.5vw,13px);color:rgba(201,168,76,0.8);">...</div>
+        </div>
+      </div>
+      <div id="dk-question" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(12px,3vw,15px);color:rgba(220,210,190,0.7);line-height:1.5;margin-top:4px;">...</div>
+    </div>
+
+    <!-- STREAK 7 ДНЕЙ -->
+    <div id="streak-widget" style="
+      padding:8px 12px;border-radius:10px;
+      background:rgba(201,168,76,0.04);
+      border:1px solid rgba(201,168,76,0.15);
+      display:flex;align-items:center;gap:10px;justify-content:center;
+    ">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.15em;color:rgba(201,168,76,0.4);">СЕРИЯ</div>
+      <div id="streak-dots" style="display:flex;gap:6px;align-items:center;"></div>
+      <div id="streak-count" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(201,168,76,0.7);min-width:20px;text-align:center;">0</div>
     </div>
 
     <!-- 3. МАТРИЦА ВОСПРИЯТИЯ (все 33) -->
@@ -785,7 +787,7 @@ window.applyMatrixTheme = function(mid) {
     if (container) {
       renderSwitcher(container, function(matrixId) {
         var lbl = document.getElementById('active-matrix-label');
-        var NAMES = { vedic: 'ВЕДИЧЕСКАЯ', slavic: 'СЛАВЯНСКАЯ', kabbalistic: 'КАББАЛА' };
+        var NAMES = { vedic: 'ВЕДИЧЕСКАЯ', slavic: 'СЛАВЯНСКАЯ', kabbalistic: 'КАББАЛА', dao: 'ДАОСИЗМ', maya: 'МАЙЯНСКАЯ', shambhala: 'ШАМБАЛА', gene: 'ГЕННЫЕ КЛЮЧИ', egypt: 'ЕГИПЕТСКАЯ', julian: 'ЮЛИАНСКАЯ' };
         if (lbl) lbl.textContent = NAMES[matrixId] || matrixId.toUpperCase();
       });
     }

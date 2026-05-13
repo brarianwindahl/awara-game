@@ -1,11 +1,8 @@
 /**
- * matrixSwitcher.js — быстрый переключатель 3 основных матриц восприятия
- *
- * Ведическая / Славянская / Каббалистическая
+ * matrixSwitcher.js — переключатель 9 матриц восприятия
  *
  * Использование:
  *   import { getActivePerception, setActivePerception, PERCEPTIONS } from './js/matrixSwitcher.js';
- *   const current = getActivePerception(); // 'vedic' | 'slavic' | 'kabbalistic'
  *   setActivePerception('slavic');
  */
 
@@ -51,12 +48,90 @@ export const PERCEPTIONS = [
     border: 'rgba(136,136,255,0.5)',
     borderIdle: 'rgba(136,136,255,0.15)',
     desc: 'Древо Жизни, Сефирот'
+  },
+  {
+    id: 'dao',
+    slug: 'dao',
+    label: 'ДАОСИЗМ',
+    shortLabel: 'ДАО',
+    icon: '☯',
+    color: '#88ffcc',
+    accent: 'rgba(136,255,204,0.85)',
+    bgGlow: 'rgba(100,255,180,0.15)',
+    border: 'rgba(136,255,204,0.5)',
+    borderIdle: 'rgba(136,255,204,0.15)',
+    desc: 'У-Син, Ба Цзы, И-Цзин'
+  },
+  {
+    id: 'maya',
+    slug: 'maya',
+    label: 'МАЙЯНСКАЯ',
+    shortLabel: 'МАЙЯ',
+    icon: '☀',
+    color: '#44ffaa',
+    accent: 'rgba(68,255,170,0.85)',
+    bgGlow: 'rgba(50,255,150,0.15)',
+    border: 'rgba(68,255,170,0.5)',
+    borderIdle: 'rgba(68,255,170,0.15)',
+    desc: 'Цолькин, Кин, Тоны'
+  },
+  {
+    id: 'shambhala',
+    slug: 'shambhala',
+    label: 'ШАМБАЛА',
+    shortLabel: 'ШАМБАЛА',
+    icon: '🏔️',
+    color: '#aaccff',
+    accent: 'rgba(170,204,255,0.85)',
+    bgGlow: 'rgba(150,190,255,0.15)',
+    border: 'rgba(170,204,255,0.5)',
+    borderIdle: 'rgba(170,204,255,0.15)',
+    desc: 'Калачакра, Мандалы'
+  },
+  {
+    id: 'gene',
+    slug: 'gene',
+    label: 'ГЕННЫЕ КЛЮЧИ',
+    shortLabel: 'ГЕНЫ',
+    icon: '🧬',
+    color: '#ffcc44',
+    accent: 'rgba(255,204,68,0.85)',
+    bgGlow: 'rgba(255,190,50,0.15)',
+    border: 'rgba(255,204,68,0.5)',
+    borderIdle: 'rgba(255,204,68,0.15)',
+    desc: 'Тень, Дар, Сиддхи'
+  },
+  {
+    id: 'egypt',
+    slug: 'egypt',
+    label: 'ЕГИПЕТСКАЯ',
+    shortLabel: 'ЕГИПЕТ',
+    icon: '𓀼',
+    color: '#d4af37',
+    accent: 'rgba(212,175,55,0.85)',
+    bgGlow: 'rgba(200,160,40,0.15)',
+    border: 'rgba(212,175,55,0.5)',
+    borderIdle: 'rgba(212,175,55,0.15)',
+    desc: 'Тот, Маат, Джед'
+  },
+  {
+    id: 'julian',
+    slug: 'julian',
+    label: 'ЮЛИАНСКАЯ',
+    shortLabel: 'ЮЛИАН',
+    icon: '◎',
+    color: '#ccaaff',
+    accent: 'rgba(204,170,255,0.85)',
+    bgGlow: 'rgba(180,150,255,0.15)',
+    border: 'rgba(204,170,255,0.5)',
+    borderIdle: 'rgba(204,170,255,0.15)',
+    desc: 'Нейтральная линза'
   }
 ];
 
 /**
  * Получить текущую активную матрицу восприятия.
- * @returns {string} 'vedic' | 'slavic' | 'kabbalistic'
+ * @returns {string}
  */
 export function getActivePerception() {
   var stored = localStorage.getItem(STORAGE_KEY)
@@ -69,7 +144,7 @@ export function getActivePerception() {
 /**
  * Установить активную матрицу восприятия.
  * Синхронизирует все ключи localStorage и вызывает applyMatrixTheme если доступна.
- * @param {string} id — 'vedic' | 'slavic' | 'kabbalistic'
+ * @param {string} id
  */
 export function setActivePerception(id) {
   var perc = PERCEPTIONS.find(function(p) { return p.id === id; });
@@ -102,7 +177,7 @@ export function renderSwitcher(container, onChange) {
   var current = getActivePerception();
 
   container.innerHTML = '';
-  container.style.cssText = 'display:flex;gap:6px;justify-content:center;width:100%;';
+  container.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%;';
 
   PERCEPTIONS.forEach(function(p) {
     var isActive = p.id === current;
